@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="../../../../favicon.ico">
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+  <title>Cadastro</title>
+  <!-- Estilos customizados para esse template -->
+  <link href="form-validation.css" rel="stylesheet">
+  <link href="/css/cadastro.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+  <div class="container">
+    <div class="py-5 text-left">
+      <h2>Formulário de Cadastro</h2>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 order-md-2 mb-4">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+      </div>
+      <div class="col-md-8 order-md-1">
+        <h4 class="mb-3">Dados de cadastro</h4>
+        <form class="needs-validation" novalidate>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="nome">Nome</label>
+              <input type="text" class="form-control" id="nome" placeholder="" value="" required>
+              <div class="invalid-feedback">
+                É obrigatório inserir um nome válido.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="sobrenome">Sobrenome</label>
+              <input type="text" class="form-control" id="sobrenome" placeholder="" value="" required>
+              <div class="invalid-feedback">
+                É obrigatório inserir um sobrenome válido.
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="mb-3">
+            <label for="email">E-mail</label>
+            <input type="text" class="form-control" id="email" placeholder="example@email.com" required>
+            <div class="invalid-feedback">
+              Por favor, insira seu e-mail.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="senha">Cadastre uma senha <span class="text-muted"></span></label>
+            <input type="password" class="form-control" id="senha" placeholder="password" required>
+            <div class="invalid-feedback">
+              É obrigatório inserir uma senha.
+            </div>
+          </div>
+
+
+          <hr class="mb-4">
+          <button class="btn btn-primary btn-lg btn-block" type="submit" id="enviar">Confirmar cadastro</button>
+          <a href="/index.html" class="btn btn-secondary btn-lg btn-block">Cancelar</a>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+   // Seleciona o formulário
+var form = document.querySelector('form');
+
+// Adiciona um manipulador de eventos submit ao formulário
+form.addEventListener('submit', function(event) {
+  // Seleciona os campos de entrada
+  var inputNome = document.querySelector('#nome');
+  var inputSobrenome = document.querySelector('#sobrenome');
+  var inputEmail = document.querySelector('#email');
+  var inputSenha = document.querySelector('#senha');
+
+  // Verifica se algum campo está vazio
+  if (!inputNome.value || !inputSobrenome.value || !inputEmail.value || !inputSenha.value) {
+    // Impede o envio do formulário
+    event.preventDefault();
+    // Exibe uma mensagem de erro
+    alert('Por favor, preencha todos os campos.');
+  } else {
+    // Captura o valor do input nome em uma variável
+    var nome = inputNome.value;
+    var sobrenome = inputSobrenome.value;
+    var email = inputEmail.value;
+    var senha = inputSenha.value;
+
+    // Chamando a API para cadastro do usuário
+    fetch('http://localhost:3000/clientes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        nomeUsuario: nome,
+        sobrenomeUsuario: sobrenome,
+        emailUsuario: email,
+        senhaUsuario: senha
+      })
+    })
+
+    // Confirmando sucesso
+    window.location.replace('/login.html');
+    alert("Usuário Cadastrado com sucesso!");
+    
+  }
+});
+
+
+
+  </script>
+
+</body>
+
+</html>

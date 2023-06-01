@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Alterar Cliente</title>
+  <link href="/css/alterar.css" rel="stylesheet">
+</head>
+
+<body>
+  <h1>Alterar Cliente</h1>
+  <form id="form">
+    <input type="hidden" id="id">
+    <div>
+      <label for="nome">Nome</label><br>
+      <input type="text" id="nome">
+    </div>
+    <div>
+      <label for="sobrenome">Sobrenome</label><br>
+      <input type="text" id="sobrenome">
+    </div>
+    <div>
+      <label for="email">Email</label><br>
+      <input type="email" id="email">
+    </div>
+    <div>
+      <label for="senha">Senha</label><br>
+      <input type="password" id="senha">
+    </div>
+    <div class="buttons">
+      <button type="submit">Salvar</button>
+      <a href="areaGerencial.html"><button type="button" id="cancelar">Cancelar</button></a>
+    </div>
+  </form>
+
+  <script>
+    // Captura o ID do cliente da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+
+    // Captura os elementos do formulário
+    const form = document.querySelector('#form');
+    const inputId = document.querySelector('#id');
+    const inputNome = document.querySelector('#nome');
+    const inputSobrenome = document.querySelector('#sobrenome');
+    const inputEmail = document.querySelector('#email');
+    const inputSenha = document.querySelector('#senha');
+
+    // Define o valor do campo ID
+    inputId.value = id;
+
+    // Carrega os dados do cliente
+    fetch(`http://localhost:3000/clientes/${id}`)
+      .then(response => response.json())
+      .then(cliente => {
+        // Preenche os campos do formulário com os dados do cliente
+        inputNome.value = cliente.nomeUsuario;
+        inputSobrenome.value = cliente.sobrenomeUsuario;
+        inputEmail.value = cliente.emailUsuario;
+        inputSenha.value = cliente.senhaUsuario;
+      })
+      .catch(error => console.error(error))
+
+    // Adiciona um evento de submit ao formulário
+    form.addEventListener('submit', event => {
+      // Previne o comportamento padrão do formulário
+      event.preventDefault();
+
+      // Captura os valores dos campos do formulário
+      const id = inputId.value;
+      const nome = inputNome.value;
+      const sobrenome = inputSobrenome.value;
+      const email = inputEmail.value;
+      const senha = inputSenha.value;
+
+      // Envia os dados para o servidor para atualizar o cliente
+      fetch(`http://localhost:3000/clientes/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nomeUsuario: nome,
+          sobrenomeUsuario: sobrenome,
+          emailUsuario: email,
+          senhaUsuario: senha
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          alert('Cliente atualizado com sucesso!');
+          window.location.replace('/areaGerencial.html');
+        })
+        .catch(error => console.error(error))
+    });
+  </script>
+
+
+</body>
+
+</html>

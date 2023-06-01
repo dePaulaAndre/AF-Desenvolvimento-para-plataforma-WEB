@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Exemplo</title>
+    <style>
+        table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+        th, td {
+          text-align: left;
+          padding: 8px;
+        }
+        tr:nth-child(even) {
+          background-color: #f2f2f2;
+        }
+        th {
+          background-color: #4CAF50;
+          color: white;
+        }
+      </style>
+  </head>
+  <body>
+    <h1>Área Gerencial</h1>
+    <table id="clientes">
+      <tr>
+        <th>Nome</th>
+        <th>Sobrenome</th>
+        <th>Email</th>
+        <th>Ações</th>
+      </tr>
+    </table>
+
+    <script>
+      function deleteCliente(id) {
+        if (confirm('Tem certeza de que deseja excluir este cliente?')) {
+          fetch(`http://localhost:3000/clientes/${id}`, {
+            method: 'DELETE'
+          })
+            .then(response => response.json())
+            .then(data => {
+              // Recarrega a tabela após deletar o cliente
+              loadClientes();
+            })
+            .catch(error => console.error(error))
+        }
+      }
+
+      function loadClientes() {
+        fetch('http://localhost:3000/clientes')
+          .then(response => response.json())
+          .then(data => {
+            let output = '';
+            data.forEach(cliente => {
+              output += `<tr><td>${cliente.nomeUsuario}</td><td>${cliente.sobrenomeUsuario}</td><td>${cliente.emailUsuario}</td><td><button><a href="/alterar.html?id=${cliente._id}"><img src="/img/editar.png" width=20px></button></a><button onclick="deleteCliente('${cliente._id}')"><img src="/img/cancelar.png" width=20px></button></td></tr>`;
+            });
+            document.getElementById('clientes').innerHTML = `<tr><th>Nome</th><th>Sobrenome</th><th>Email</th><th>Ações</th></tr>${output}`;
+          })
+          .catch(error => console.error(error))
+      }
+
+      loadClientes();
+    </script>
+  </body>
+</html>
